@@ -48,8 +48,27 @@ app.post("/users/signin", async (req, res) => {
   if (!user) {
     res.json({ message: "SIGNUP_REQUIRED" });
   }
+});
+return res.json({ userId: user.id });
 
-  return res.json({ userId: user.id });
+app.post("/users/signup", async (req, res) => {
+  const { username, email, password } = req.body;
+  return await myDataSource.query(
+    `
+      INSERT INTO
+        users (
+          username,
+          email,
+          password			
+        )
+      VALUES (
+        ?,
+        ?,
+        ?
+      )
+    `,
+    [username, email, password]
+  );
 });
 
 app.listen(PORT, () => {
